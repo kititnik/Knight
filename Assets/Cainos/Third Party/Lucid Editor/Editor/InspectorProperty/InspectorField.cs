@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
-using Cainos.LucidEditor;
 
 namespace Cainos.LucidEditor
 {

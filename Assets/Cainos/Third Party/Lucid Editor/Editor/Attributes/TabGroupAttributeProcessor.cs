@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Cainos.LucidEditor;
 
 namespace Cainos.LucidEditor
 {

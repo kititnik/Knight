@@ -152,7 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cf4d0f5dee0240ebbd1c96b220423ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerObject: {fileID: 3388277477035749461}
+  playerObject: {fileID: 3388277477035749461}
+  _playerConfiguration: {fileID: 11400000, guid: 1a351872c6bf049409b5350577b8cd1c, type: 2}
 --- !u!4 &277381403
 Transform:
   m_ObjectHideFlags: 0
@@ -646,7 +647,7 @@ TilemapCollider2D:
   m_GameObject: {fileID: 800001566}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9c497a4ce1f356b448c0dd3eca091d35, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -795,7 +796,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.662}
+  m_Offset: {x: 0, y: 0.7}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -806,7 +807,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.73, y: 1.2}
+  m_Size: {x: 0.7, y: 1.2}
   m_EdgeRadius: 0
 --- !u!4 &866122033927764994
 Transform:
@@ -1142,7 +1143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db112efea7c1c4e5da3d225efd20a1b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 5
 --- !u!114 &6704259060150067467
 MonoBehaviour:
   m_ObjectHideFlags: 0

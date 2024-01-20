@@ -1,17 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
+using ConfigurationScripts;
 using UnityEngine;
 
 public class Bootstrap : MonoBehaviour
 {
-    [SerializeField] private GameObject _playerObject;
+    [SerializeField] private GameObject playerObject;
     private PlayerMovement _playerMovement;
+    private PlayerCombat _playerCombat;
+    private Timer _attackDelayTimer;
+    private Timer _resetAttackTimer;
+    [SerializeField] private PlayerConfiguration _playerConfiguration;
 
-
-    void Awake()
+    private void Awake()
     {
-        _playerMovement = new PlayerMovement(_playerObject.GetComponent<SpriteRenderer>(),
-            _playerObject.GetComponent<Rigidbody2D>(), _playerObject.GetComponent<Animator>());
-        _playerObject.GetComponent<Player>().Inititialize(_playerMovement);
+        _attackDelayTimer = new Timer(this);
+        _resetAttackTimer = new Timer(this);
+        _playerCombat = new PlayerCombat(_playerConfiguration, playerObject.GetComponent<Animator>(), _attackDelayTimer, _resetAttackTimer);
+        _playerMovement = new PlayerMovement( _playerConfiguration, playerObject.GetComponent<SpriteRenderer>(),
+            playerObject.GetComponent<Rigidbody2D>(), playerObject.GetComponent<Animator>());
+        playerObject.GetComponent<Player>().Initialize(_playerMovement, _playerCombat);
     }
 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEditor;
-using Cainos.LucidEditor;
 
 namespace Cainos.LucidEditor
 {
