@@ -26,7 +26,7 @@ public class PlayerMovement
         if (inputX < 0) _spriteRenderer.flipX = true;
         else if(inputX > 0) _spriteRenderer.flipX = false;
         var position = _rigidbody2D.position;
-        _rigidbody2D.MovePosition(position + new Vector2(inputX, position.y) * (_playerMovementSpeed * Time.fixedDeltaTime));
+        _rigidbody2D.MovePosition(position + new Vector2(inputX, 0) * (_playerMovementSpeed * Time.fixedDeltaTime));
         _animator.SetFloat("Speed", Mathf.Abs(inputX));
     }
 }
