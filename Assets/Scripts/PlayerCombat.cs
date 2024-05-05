@@ -1,23 +1,24 @@
 using ConfigurationScripts;
 using UnityEngine;
 
-public class PlayerCombat
+[RequireComponent(typeof(Animator))]
+public class PlayerCombat : MonoBehaviour
 {
-    private readonly Animator _animator;
-    private readonly Timer _attackDelayTimer;
-    private readonly Timer _resetAttackTimer;
+    [SerializeField] private PlayerConfiguration playerConfiguration;
+    private Animator _animator;
+    private Timer _attackDelayTimer;
+    private Timer _resetAttackTimer;
     private int _currentAttack;
-    private readonly int _maxAttack;
+    private int _maxAttack;
     private bool _canAttack;
-    private readonly float _attackDelay;
-    private readonly float _resetAttackDelay;
-    private readonly float _swordDamage;
+    private float _attackDelay;
+    private float _resetAttackDelay;
+    private float _swordDamage;
 
-    public PlayerCombat(PlayerConfiguration playerConfiguration, Animator animator, Timer attackDelayTimer, Timer resetAttackTimer)
+    private void Awake()
     {
-        _animator = animator;
-        _attackDelayTimer = attackDelayTimer;
-        _resetAttackTimer = resetAttackTimer;
+        _attackDelayTimer = new Timer(this);
+        _resetAttackTimer = new Timer(this);
 
         _attackDelayTimer.TimeIsOver += SetCanAttack; 
         _resetAttackTimer.TimeIsOver += ResetAttack;
@@ -29,6 +30,13 @@ public class PlayerCombat
         _attackDelay = playerConfiguration.swordAttackDelay;
         _resetAttackDelay = playerConfiguration.resetSwordAttackDelay;
         _swordDamage = playerConfiguration.swordDamage;
+
+        _animator = GetComponent<Animator>();
+    }
+
+    private void Update()
+    {
+        if(Input.GetButtonDown("Fire1")) Debug.Log(SwordAttack());
     }
 
     private void ResetAttack() => _currentAttack = 1;

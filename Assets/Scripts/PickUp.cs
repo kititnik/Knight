@@ -1,0 +1,23 @@
+using Unity.VisualScripting;
+using UnityEngine;
+
+[RequireComponent(typeof(InventoryHandler))]
+public class PickUp : MonoBehaviour
+{
+    private InventoryHandler _inventory;
+
+    private void Awake()
+    {
+        _inventory = GetComponent<InventoryHandler>();
+    }
+
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if(col.gameObject.GetComponent<Item>() != null) 
+        {
+            var itemComponent = col.gameObject.GetComponent<Item>();
+            _inventory.AddItem(itemComponent.Id);
+            itemComponent.OnPickUp();
+        }
+    }
+}

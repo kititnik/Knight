@@ -2,23 +2,22 @@ using System.Collections.Generic;
 
 public class Inventory
 {
-    private Dictionary<Item, int> inventory;
+    private Dictionary<int, int> inventory;
 
     public Inventory()
     {
-        inventory = new Dictionary<Item, int>();
+        inventory = new Dictionary<int, int>();
     }
-    public Item GetItem(Item item)
+    public int GetItem(int itemId)
     {
-        if(!inventory.ContainsKey(item)) return null;
-        if(inventory[item] == 0) return null;
-        inventory[item]--;
-        return item;
+        if(!inventory.ContainsKey(itemId)) return -1;
+        if(inventory[itemId] == 0) return -1;
+        inventory[itemId]--;
+        return itemId;
     }
-    public int AddItem(Item item)
+    public void AddItem(int itemId)
     {
-        if(inventory.ContainsKey(item)) inventory[item]++;
-        else inventory[item] = 1;
-        return inventory[item];
+        if(inventory.ContainsKey(itemId)) inventory[itemId]++;
+        else inventory[itemId] = 1;
     }
 }

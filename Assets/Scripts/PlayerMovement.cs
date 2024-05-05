@@ -1,24 +1,26 @@
 using ConfigurationScripts;
 using UnityEngine;
 
-public class PlayerMovement
+[RequireComponent(typeof(SpriteRenderer), typeof(Rigidbody2D), typeof(Animator))]
+public class PlayerMovement : MonoBehaviour
 {
-    private readonly SpriteRenderer _spriteRenderer;
-    private readonly Rigidbody2D _rigidbody2D;
-    private readonly Animator _animator;
+    [SerializeField] private PlayerConfiguration playerConfiguration;
+    private SpriteRenderer _spriteRenderer;
+    private Rigidbody2D _rigidbody2D;
+    private Animator _animator;
     private float _playerMovementSpeed;
 
-    public PlayerMovement(PlayerConfiguration playerConfiguration, SpriteRenderer spriteRenderer, Rigidbody2D rigidbody2D, Animator animator)
+    private void Awake()
     {
-        _spriteRenderer = spriteRenderer;
-        _rigidbody2D = rigidbody2D;
-        _animator = animator;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _animator = GetComponent<Animator>();
+        _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerMovementSpeed = playerConfiguration.playerMovementSpeed;
     }
 
-    private void Jump(float jumpForce)
+    private void FixedUpdate()
     {
-        _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, jumpForce);
+        Move(Input.GetAxisRaw("Horizontal"));
     }
 
     public void Move(float inputX)
