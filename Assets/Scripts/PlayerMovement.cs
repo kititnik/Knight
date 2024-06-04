@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D _rigidbody2D;
     private Animator _animator;
     private float _playerMovementSpeed;
+    private bool _facingRight;
 
     private void Awake()
     {
@@ -23,10 +24,21 @@ public class PlayerMovement : MonoBehaviour
         Move(Input.GetAxisRaw("Horizontal"));
     }
 
+    private void Flip()
+    {
+        _facingRight = !_facingRight;
+        _spriteRenderer.flipX = !_spriteRenderer.flipX;
+        var colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders)
+        {
+            collider.offset = new Vector2(collider.offset.x*-1, collider.offset.y);
+        }
+    }
+
     public void Move(float inputX)
     {
-        if (inputX < 0) _spriteRenderer.flipX = true;
-        else if(inputX > 0) _spriteRenderer.flipX = false;
+        if (inputX < 0 && !_facingRight) Flip();
+        else if(inputX > 0 && _facingRight) Flip();
         var position = _rigidbody2D.position;
         _rigidbody2D.MovePosition(position + new Vector2(inputX, 0) * (_playerMovementSpeed * Time.fixedDeltaTime));
         _animator.SetFloat("Speed", Mathf.Abs(inputX));

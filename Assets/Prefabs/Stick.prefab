@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2643534115616894191}
   - component: {fileID: 8855300806856170563}
   - component: {fileID: 4778515923531395483}
-  - component: {fileID: 8599571039647206561}
+  - component: {fileID: 8613079063867865748}
   m_Layer: 0
   m_Name: Stick
   m_TagString: Untagged
@@ -159,7 +159,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &8599571039647206561
+--- !u!114 &8613079063867865748
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1486510038494247780}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 707ee68eaa2b7496781843df149dccda, type: 3}
+  m_Script: {fileID: 11500000, guid: 6bebb68a0e6cb4471bc199ac0e3dc07f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1

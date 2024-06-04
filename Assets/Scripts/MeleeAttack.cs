@@ -1,12 +1,9 @@
-using ConfigurationScripts;
-using Unity.VisualScripting;
 using UnityEngine;
+using ConfigurationScripts;
 
-[RequireComponent(typeof(Animator))]
-public class PlayerCombat : MonoBehaviour
+public class MeleeAttack : MonoBehaviour
 {
-    [SerializeField] private PlayerConfiguration playerConfiguration;
-    private Animator _animator;
+    [SerializeField] private EnemyConfiguration enemyConfiguration;
     private Timer _attackDelayTimer;
     private Timer _resetAttackTimer;
     private int _currentAttack;
@@ -15,7 +12,6 @@ public class PlayerCombat : MonoBehaviour
     private float _attackDelay;
     private float _resetAttackDelay;
     private float _swordDamage;
-    private float _currentDamage;
     private Health _enemyHealth;
 
     private void Awake()
@@ -29,35 +25,36 @@ public class PlayerCombat : MonoBehaviour
 
         _canAttack = true;
         _currentAttack = 1;
-        _maxAttack = playerConfiguration.maxSwordAttack;
-        _attackDelay = playerConfiguration.swordAttackDelay;
-        _resetAttackDelay = playerConfiguration.resetSwordAttackDelay;
-        _swordDamage = playerConfiguration.swordDamage;
-
-        _animator = GetComponent<Animator>();
-    }
-
-    private void Update()
-    {
-        if(Input.GetButtonDown("Fire1")) SwordAttack();
+        _maxAttack = enemyConfiguration.maxSwordAttack;
+        _attackDelay = enemyConfiguration.meleeAttackDelay;
+        _resetAttackDelay = enemyConfiguration.resetSwordAttackDelay;
+        _swordDamage = enemyConfiguration.swordDamage;
     }
 
     private void ResetAttack() => _currentAttack = 1;
 
     private void SetCanAttack() => _canAttack = true;
-    
-    public void SwordAttack()
+
+    public void Update()
     {
-        if (!_canAttack) return;
+        if(_enemyHealth != null) 
+        {
+            float damage = Attack();
+            if(damage > 0) _enemyHealth.GetDamage(damage);
+        }
+    }
+
+    public float Attack()
+    {
+        if (!_canAttack) return 0;
         if (_currentAttack > _maxAttack) ResetAttack();
-        _animator.Play("HeroKnight_Attack" + _currentAttack);
-        _currentDamage = _swordDamage;
-        if (_currentAttack > 1) _currentDamage += _currentDamage * (_currentAttack / 10.0f);
-        if(_enemyHealth != null) _enemyHealth.GetDamage(_currentDamage);
+        float damage = _swordDamage;
+        if (_currentAttack > 1) damage += damage * (_currentAttack / 10.0f);
         _currentAttack++;
         _canAttack = false;
         _attackDelayTimer.StartTimer(_attackDelay);
         _resetAttackTimer.RestartTimer(_resetAttackDelay);
+        return damage;
     }
 
     private void OnTriggerEnter2D(Collider2D other)

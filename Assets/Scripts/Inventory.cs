@@ -1,23 +1,53 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class Inventory
+[Serializable]
+public class Inventory : IEnumerable
 {
-    private Dictionary<int, int> inventory;
+    [SerializeField]
+    private List<InventoryItem> _inventory;
+    public IEnumerator GetEnumerator() => _inventory.GetEnumerator();
 
-    public Inventory()
+    public Inventory(int size)
     {
-        inventory = new Dictionary<int, int>();
+        _inventory = new List<InventoryItem>(size);
     }
-    public int GetItem(int itemId)
+
+    public IEnumerable<InventoryItem> GetSlots()
     {
-        if(!inventory.ContainsKey(itemId)) return -1;
-        if(inventory[itemId] == 0) return -1;
-        inventory[itemId]--;
-        return itemId;
+        return _inventory;
     }
-    public void AddItem(int itemId)
+
+    private int FindItemIndex(int itemId)
     {
-        if(inventory.ContainsKey(itemId)) inventory[itemId]++;
-        else inventory[itemId] = 1;
+        for (int i = 0; i < _inventory.Count; i++)
+        {
+            if (_inventory[i].ItemId == itemId) return i;
+        }
+        return -1;
+    }
+
+    public bool IsInventoryHasItem(int itemId)
+    {
+        return FindItemIndex(itemId) == -1 ? false : true;
+    }
+
+    public bool RemoveItem(int itemId)
+    {
+        int i = FindItemIndex(itemId);
+        if (i == -1) return false;
+        _inventory[i].Count--;
+        if(_inventory[i].Count == 0) _inventory.RemoveAt(i);
+        return true;
+    }
+
+    public bool AddItem(int itemId)
+    {
+        int i = FindItemIndex(itemId);
+        if(i == -1) _inventory.Add(new InventoryItem(itemId, 0));
+        else _inventory[i].Count++;
+        return true;
     }
 }

@@ -13,11 +13,9 @@ public class PickUp : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if(col.gameObject.GetComponent<Item>() != null) 
-        {
-            var itemComponent = col.gameObject.GetComponent<Item>();
-            _inventory.AddItem(itemComponent.Id);
-            itemComponent.OnPickUp();
-        }
+        if (col.gameObject.GetComponent<Item>() == null) return;
+        var itemComponent = col.gameObject.GetComponent<Item>();
+        _inventory.AddItem(itemComponent.Id);
+        itemComponent.OnPickUp();
     }
 }

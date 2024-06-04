@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public class Item : MonoBehaviour
 {
     [SerializeField] private int id;
     public int Id
