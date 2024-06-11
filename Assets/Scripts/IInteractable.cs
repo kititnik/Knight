@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IInteractable
 {
-    void Invoke(GameObject player);
+    void Invoke(GameObject player, GameObject interactionUI);
 }

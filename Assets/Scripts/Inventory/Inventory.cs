@@ -50,4 +50,11 @@ public class Inventory : IEnumerable
         else _inventory[i].Count++;
         return true;
     }
+
+    public int GetItemCount(int itemId)
+    {
+        int i = FindItemIndex(itemId);
+        if(i==-1) return 0;
+        return _inventory[i].Count;
+    }
 }

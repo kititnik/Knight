@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InteractableTest : MonoBehaviour, IInteractable
 {
-    public void Invoke(GameObject player)
+    public void Invoke(GameObject player, GameObject interactionUI)
     {
         Debug.Log("Interaction with " + gameObject.name);
     }
