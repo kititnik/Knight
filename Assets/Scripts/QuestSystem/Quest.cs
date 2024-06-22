@@ -1,21 +1,50 @@
-using System;
 using UnityEngine;
 
-public abstract class Quest : MonoBehaviour, ICloneable
+public class Quest
 {
-    [field:SerializeField] public string Title {get; private set;}
-    [field:SerializeField] public string Description {get; private set;}
-    [field:SerializeField] public QuestStatus Status {get; private set;}
-
-    public void SetStatus(QuestStatus newQuestStatus)
+    public QuestInfoSO Info;
+    public QuestState State;
+    private int currentQuestStepIndex;
+    public Quest(QuestInfoSO questInfo)
     {
-        Status = newQuestStatus;
+        Info = questInfo;
+        State = QuestState.CanStart;
+        currentQuestStepIndex = 0;
     }
 
-    public abstract bool CompleteQuest();
-
-    public object Clone()
+    public void MoveToNextStep()
     {
-        return MemberwiseClone();
+        currentQuestStepIndex++;
+    }
+
+    public bool CurrentStepExists()
+    {
+        return currentQuestStepIndex < Info.QuestStepPrefabs.Length;
+    }
+
+    public void InstatiateCurrentQuestStep(Transform parentTransform)
+    {
+        GameObject questStepPrefab = GetCurrentQuestStepPrefab();
+        if (questStepPrefab != null)
+        {
+            QuestStep questStep = Object.Instantiate(questStepPrefab, parentTransform)
+                .GetComponent<QuestStep>();
+            questStep.InitializeQuestStep(Info.Id);
+        }
+    }
+
+    private GameObject GetCurrentQuestStepPrefab()
+    {
+        GameObject questStepPrefab = null;
+        if (CurrentStepExists())
+        {
+            questStepPrefab = Info.QuestStepPrefabs[currentQuestStepIndex];
+        }
+        else 
+        {
+            Debug.LogWarning("Tried to get quest step prefab, but stepIndex was out of range indicating that "
+                + "there's no current step: QuestId=" + Info.Id + ", stepIndex=" + currentQuestStepIndex);
+        }
+        return questStepPrefab;
     }
 }
