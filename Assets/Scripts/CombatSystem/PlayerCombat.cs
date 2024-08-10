@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 using ConfigurationScripts;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,11 +18,13 @@ public class PlayerCombat : MonoBehaviour
     private float _attackDelay;
     private float _resetAttackDelay;
     private float _swordDamage;
-    private float _currentDamage;
-    private Health _enemyHealth;
+    private List<IDamageable> _enemyHealths;
+
 
     private void Awake()
     {
+        _enemyHealths = new List<IDamageable>();
+
         _attackDelayTimer = new Timer(this);
         _resetAttackTimer = new Timer(this);
 
@@ -39,34 +44,50 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetButtonDown("Fire1")) SwordAttack();
+        float damage = 0;
+        if(Input.GetButtonDown("Fire1")) damage = SwordAttack();
+        if(damage > 0)
+        {
+            try
+            {
+                foreach(IDamageable enemyHealth in _enemyHealths)
+                {
+                    enemyHealth.GetDamage(damage);
+                }
+            }
+            catch(InvalidOperationException) {}
+            catch(MissingReferenceException) {}
+        }
     }
 
     private void ResetAttack() => _currentAttack = 1;
 
     private void SetCanAttack() => _canAttack = true;
     
-    public void SwordAttack()
+    public float SwordAttack()
     {
-        if (!_canAttack) return;
+        if (!_canAttack) return 0;
         if (_currentAttack > _maxAttack) ResetAttack();
         _animator.Play("HeroKnight_Attack" + _currentAttack);
-        _currentDamage = _swordDamage;
-        if (_currentAttack > 1) _currentDamage += _currentDamage * (_currentAttack / 10.0f);
-        if(_enemyHealth != null) _enemyHealth.GetDamage(_currentDamage);
+        float damage = _swordDamage;
+        if (_currentAttack > 1) damage += damage * (_currentAttack / 10.0f);
         _currentAttack++;
         _canAttack = false;
         _attackDelayTimer.StartTimer(_attackDelay);
         _resetAttackTimer.RestartTimer(_resetAttackDelay);
+        return damage;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        _enemyHealth = other.GetComponent<Health>();
+        var enemyHealth = other.GetComponent<IDamageable>();
+        if(enemyHealth == null || _enemyHealths.Contains(enemyHealth)) return;
+        _enemyHealths.Add(enemyHealth);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        _enemyHealth = null;
+        if(other.GetComponent<IDamageable>() == null) return;
+        _enemyHealths.Remove(other.GetComponent<IDamageable>());
     }
 }

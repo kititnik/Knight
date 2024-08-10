@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : MonoBehaviour, IDamageable
 {
     [SerializeField] private float health;
 
@@ -8,6 +8,10 @@ public class Health : MonoBehaviour
     {
         health -= damage;
         Debug.Log(gameObject.name + " got damage: " + damage +  ". Current health: " + health);
-        if(health <= 0) Destroy(gameObject);
+        if(health <= 0) Death();
+    }
+    public void Death()
+    {
+        Destroy(gameObject);
     }
 }

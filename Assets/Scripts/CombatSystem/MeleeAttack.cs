@@ -1,9 +1,11 @@
 using UnityEngine;
 using ConfigurationScripts;
+using System.Collections.Generic;
+using System;
 
 public class MeleeAttack : MonoBehaviour
 {
-    [SerializeField] private EnemyConfiguration enemyConfiguration;
+    [SerializeField] private EnemyConfiguration attackConfiguration;
     private Timer _attackDelayTimer;
     private Timer _resetAttackTimer;
     private int _currentAttack;
@@ -12,10 +14,12 @@ public class MeleeAttack : MonoBehaviour
     private float _attackDelay;
     private float _resetAttackDelay;
     private float _swordDamage;
-    private Health _enemyHealth;
+    [SerializeField] private List<IDamageable> _enemyHealths;
 
     private void Awake()
     {
+        _enemyHealths = new List<IDamageable>();
+
         _attackDelayTimer = new Timer(this);
         _resetAttackTimer = new Timer(this);
 
@@ -25,10 +29,10 @@ public class MeleeAttack : MonoBehaviour
 
         _canAttack = true;
         _currentAttack = 1;
-        _maxAttack = enemyConfiguration.maxSwordAttack;
-        _attackDelay = enemyConfiguration.meleeAttackDelay;
-        _resetAttackDelay = enemyConfiguration.resetSwordAttackDelay;
-        _swordDamage = enemyConfiguration.swordDamage;
+        _maxAttack = attackConfiguration.maxSwordAttack;
+        _attackDelay = attackConfiguration.meleeAttackDelay;
+        _resetAttackDelay = attackConfiguration.resetSwordAttackDelay;
+        _swordDamage = attackConfiguration.swordDamage;
     }
 
     private void ResetAttack() => _currentAttack = 1;
@@ -37,11 +41,17 @@ public class MeleeAttack : MonoBehaviour
 
     public void Update()
     {
-        if(_enemyHealth != null) 
+        float damage = Attack();
+        if(damage <= 0) return;
+        try
         {
-            float damage = Attack();
-            if(damage > 0) _enemyHealth.GetDamage(damage);
+            foreach(IDamageable enemyHealth in _enemyHealths)
+            {
+                enemyHealth.GetDamage(damage);
+            }
         }
+        catch(InvalidOperationException) {}
+        catch(MissingReferenceException) {}
     }
 
     public float Attack()
@@ -59,11 +69,14 @@ public class MeleeAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        _enemyHealth = other.GetComponent<Health>();
+        var enemyHealth = other.GetComponent<IDamageable>();
+        if(enemyHealth == null || _enemyHealths.Contains(enemyHealth)) return;
+        _enemyHealths.Add(enemyHealth);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        _enemyHealth = null;
+        if(other.GetComponent<IDamageable>() == null) return;
+        _enemyHealths.Remove(other.GetComponent<IDamageable>());
     }
 }
