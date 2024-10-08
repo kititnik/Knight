@@ -4,25 +4,25 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Stalking : MonoBehaviour
 {
-    [SerializeField] private Transform stalkingTarget;
-    [SerializeField] private float speed;
-    [SerializeField] private float allowedDistance;
-    private Rigidbody2D _rigidbody2D;
-    private SpriteRenderer _spriteRenderer;
-    private bool _facingRight;
+    [SerializeField] protected Transform stalkingTarget;
+    [SerializeField] protected float speed;
+    [SerializeField] protected float allowedDistance;
+    protected Rigidbody2D _rigidbody2D;
+    protected SpriteRenderer _spriteRenderer;
+    protected bool _facingRight;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         Move();
     }
 
-    private void Flip()
+    protected virtual void Flip()
     {
         _facingRight = !_facingRight;
         _spriteRenderer.flipX = !_spriteRenderer.flipX;
@@ -33,7 +33,7 @@ public class Stalking : MonoBehaviour
         }
     }
 
-    private void Move()
+    protected virtual void Move()
     {
         if (stalkingTarget == null) return;
         float distance = transform.position.x - stalkingTarget.position.x;

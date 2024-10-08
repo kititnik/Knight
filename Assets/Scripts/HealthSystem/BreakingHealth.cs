@@ -10,10 +10,12 @@ public class BreakingHealth : MonoBehaviour, IDamageable
     [SerializeField] List<DamageStage> damageStages;
     private int _currentDamageStage;
     private float _health;
+    private Collider2D _collider;
 
     private void Awake()
     {
         _health = maxHealth;
+        _collider = GetComponent<Collider2D>();
     }
 
     public void GetDamage(float damage)
@@ -32,6 +34,7 @@ public class BreakingHealth : MonoBehaviour, IDamageable
     public void Death()
     {
         Debug.Log("Broken");
+        _collider.isTrigger = true;
     }
 
     [Serializable]

@@ -15,6 +15,7 @@ public class MeleeAttack : MonoBehaviour
     private float _resetAttackDelay;
     private float _swordDamage;
     [SerializeField] private List<IDamageable> _enemyHealths;
+    [SerializeField] private List<string> alliesTags;
 
     private void Awake()
     {
@@ -70,7 +71,9 @@ public class MeleeAttack : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         var enemyHealth = other.GetComponent<IDamageable>();
-        if(enemyHealth == null || _enemyHealths.Contains(enemyHealth)) return;
+        if(enemyHealth == null) return;
+        if(_enemyHealths.Contains(enemyHealth)) return;
+        if(alliesTags.Contains(other.tag)) return;
         _enemyHealths.Add(enemyHealth);
     }
 

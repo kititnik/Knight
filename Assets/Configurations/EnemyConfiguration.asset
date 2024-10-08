@@ -16,4 +16,4 @@ MonoBehaviour:
   meleeAttackDelay: 1
   resetSwordAttackDelay: 0
   maxSwordAttack: 1
-  swordDamage: 10
+  swordDamage: 5
